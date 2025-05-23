@@ -1,0 +1,157 @@
+<!-- File: game.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punch Combat - KnockoutCore</title>
+  <meta name="description" content="Challenge a friend to a mini 2-player combat game for street MMA enthusiasts in Udaipur. Support us by playing!">
+  <!-- AdSense Site Verification -->
+  <meta name="google-adsense-account" content="ca-pub-8972472831757886">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+  <!-- AdSense Loader -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8972472831757886"
+          crossorigin="anonymous"></script>
+</head>
+<body class="game-bg cool-tone">
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container">
+      <h1 class="logo">KnockoutCore</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="game.html">Game</a></li>
+          <li><a href="watchads.html">Watch Ads</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Back Button -->
+  <button class="btn back-btn" onclick="location.href='index.html'">← Back</button>
+
+  <!-- Combat Game Section -->
+  <main class="content-section game-section">
+    <div class="container combat-grid">
+      <div class="fighter ring" id="fighter1">
+        <div class="avatar" id="avatar1"></div>
+        <h3>Fighter 1</h3>
+        <div class="health-bar">
+          <div class="health-fill" id="health1"></div>
+        </div>
+        <button class="btn action-btn" data-target="2">Punch</button>
+      </div>
+      <div class="fighter ring" id="fighter2">
+        <div class="avatar" id="avatar2"></div>
+        <h3>Fighter 2</h3>
+        <div class="health-bar">
+          <div class="health-fill" id="health2"></div>
+        </div>
+        <button class="btn action-btn" data-target="1">Punch</button>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="start-btn" class="btn start-btn">Start Fight</button>
+      <button id="reset-btn" class="btn reset-btn">Reset Fight</button>
+    </div>
+    <p id="result" class="result"></p>
+  </main>
+
+  <!-- Ads Slots -->
+  <div class="ads-container">
+    <!-- Slot 1 -->
+    <ins class="adsbygoogle ad-slot"
+         style="display:block"
+         data-ad-client="ca-pub-8972472831757886"
+         data-ad-slot="2222222222"
+         data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    <!-- Slot 2 -->
+    <ins class="adsbygoogle ad-slot"
+         style="display:block"
+         data-ad-client="ca-pub-8972472831757886"
+         data-ad-slot="3333333333"
+         data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    <!-- Slot 3 -->
+    <ins class="adsbygoogle ad-slot"
+         style="display:block"
+         data-ad-client="ca-pub-8972472831757886"
+         data-ad-slot="4444444444"
+         data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Game Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const maxHealth = 100;
+      let health1 = maxHealth, health2 = maxHealth;
+      const h1 = document.getElementById('health1'),
+            h2 = document.getElementById('health2'),
+            resultEl = document.getElementById('result');
+      const actions = document.querySelectorAll('.action-btn');
+      const startBtn = document.getElementById('start-btn'),
+            resetBtn = document.getElementById('reset-btn');
+
+      const updateBars = () => {
+        h1.style.width = health1 + '%';
+        h2.style.width = health2 + '%';
+      };
+
+      const checkWinner = () => {
+        if (health1 <= 0) { resultEl.textContent = 'Fighter 2 Wins!'; return true; }
+        if (health2 <= 0) { resultEl.textContent = 'Fighter 1 Wins!'; return true; }
+        return false;
+      };
+
+      const disableActions = () => actions.forEach(btn => btn.disabled = true);
+      const enableActions = () => actions.forEach(btn => btn.disabled = false);
+
+      disableActions();
+      resetBtn.disabled = true;
+
+      startBtn.addEventListener('click', () => {
+        health1 = health2 = maxHealth;
+        updateBars();
+        resultEl.textContent = '';
+        enableActions();
+        startBtn.disabled = true;
+        resetBtn.disabled = false;
+      });
+
+      actions.forEach(btn => btn.addEventListener('click', () => {
+        const dmg = Math.floor(Math.random() * 20) + 10;
+        if (btn.dataset.target === '1') {
+          health1 = Math.max(0, health1 - dmg);
+        } else {
+          health2 = Math.max(0, health2 - dmg);
+        }
+        btn.classList.add('hit-animation');
+        setTimeout(() => btn.classList.remove('hit-animation'), 200);
+        updateBars();
+        if (checkWinner()) disableActions();
+      }));
+
+      resetBtn.addEventListener('click', () => {
+        health1 = health2 = maxHealth;
+        updateBars();
+        resultEl.textContent = '';
+        resetBtn.disabled = true;
+        startBtn.disabled = false;
+        disableActions();
+      });
+
+      updateBars();
+    });
+  </script>
+</body>
+</html>
